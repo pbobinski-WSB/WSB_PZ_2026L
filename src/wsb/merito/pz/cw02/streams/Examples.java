@@ -1,4 +1,4 @@
-package wsb.merito.pz.cw02;
+package wsb.merito.pz.cw02.streams;
 
 import java.io.IOException;
 import java.nio.file.Files;
