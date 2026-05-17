@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>wsb.pz.cw03</groupId>
-    <artifactId>Wyk02</artifactId>
+    <artifactId>UnitTests</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>

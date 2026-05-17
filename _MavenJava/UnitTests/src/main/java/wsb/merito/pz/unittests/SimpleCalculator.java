@@ -1,4 +1,4 @@
-package wsb.ticr.unittests;
+package wsb.merito.pz.unittests;
 
 public class SimpleCalculator {
 

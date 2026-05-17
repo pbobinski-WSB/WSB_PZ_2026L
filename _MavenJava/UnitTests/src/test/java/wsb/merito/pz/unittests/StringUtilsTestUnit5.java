@@ -1,4 +1,4 @@
-package wsb.ticr.unittests;
+package wsb.merito.pz.unittests;
 
 import static org.junit.jupiter.api.Assertions.*;
 

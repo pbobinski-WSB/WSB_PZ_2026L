@@ -1,7 +1,7 @@
-package wsb.ticr.regression;
+package wsb.merito.pz.regression;
 
 import org.junit.jupiter.api.Test;
-import wsb.ticr.regresion.OrderProcessor;
+import wsb.merito.pz.regresion.OrderProcessor;
 
 import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.assertEquals;

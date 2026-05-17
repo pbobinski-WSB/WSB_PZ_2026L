@@ -1,4 +1,4 @@
-package wsb.ticr.regresion;
+package wsb.merito.pz.regresion;
 
 import java.math.BigDecimal;
 

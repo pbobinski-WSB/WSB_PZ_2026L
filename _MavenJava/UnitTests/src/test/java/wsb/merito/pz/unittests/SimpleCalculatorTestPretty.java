@@ -1,4 +1,4 @@
-package wsb.ticr.unittests;
+package wsb.merito.pz.unittests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
