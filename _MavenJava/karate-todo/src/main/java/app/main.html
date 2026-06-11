@@ -1,0 +1,105 @@
+<script ka:scope="global">
+  session.todos = session.todos || [];
+  var todos = session.todos;
+  var action = request.param('action');
+  if (request.post) {
+    var id = request.param('id');
+    switch (action) {
+      case 'add':
+        var title = request.param('title');
+        todos.push({id: context.uuid(), title: title, complete: false});
+        break;
+      case 'remove':
+        var index = todos.findIndex(x => x.id === id);
+        todos.splice(index, 1);
+        break;
+      case 'toggle':
+        var found = todos.find(x => x.id === id);
+        found.complete = !found.complete;
+        break;
+      case 'removeComplete':
+        todos = todos.filter(x => !x.complete);
+        session.todos = todos;
+        break;
+      case 'update':
+        var title = request.param('title');
+        if (title !== '') { // escape key
+          var found = todos.find(x => x.id === id);
+          found.title = title;
+        }
+        session.editing = null;
+        break;
+      case 'edit':
+        session.editing = id;
+        break;
+      case 'toggleAll':
+        var anyActive = !!todos.find(x => !x.complete);
+        todos.forEach(x => x.complete = anyActive);
+        break;
+    }
+    filtered = todos;
+    showing = 'all';
+  } else { // GET
+    showing = action;
+    switch (action) {
+      case 'active':
+        filtered = todos.filter(x => !x.complete);
+        break;
+      case 'complete':
+        filtered = todos.filter(x => x.complete);
+        break;
+      default:
+        filtered = todos;
+        showing = 'all';
+    }
+  }
+  var remaining = todos.filter(x => !x.complete).length;
+  var selectIf = a => showing === a ? 'btn-primary' : 'btn-outline-primary';
+</script>
+
+<div class="container" hx-target="this" hx-swap="outerHTML">
+  <div class="row p-3">
+    <div class="col">
+      <h1 class="text-center">todos</h1>
+    </div>    
+  </div>
+  <div class="row pb-2">
+    <div class="col-1 pt-2">
+      <div class="form-check form-switch" th:if="todos.length">
+        <input class="form-check-input" type="checkbox" th:checked="remaining == 0" ka:post="this" ka:vals="action:'toggleAll'">
+      </div>      
+    </div>    
+    <div class="col p-0">
+      <input class="form-control form-control-lg" placeholder="What needs to be done?" name="title" ka:post="this" ka:vals="action:'add'" th:autofocus="!session.editing">
+    </div>
+  </div>
+  <div class="row py-2" th:each="todo: filtered" ka:vals="id:todo.id">
+    <div class="col-1 text-center">
+      <input class="form-check-input" type="checkbox" th:checked="todo.complete" ka:post="this" ka:vals="action:'toggle'">
+    </div>
+    <div class="col border-bottom p-0" th:with="editing:session.editing==todo.id">
+      <div th:unless="editing" th:text="todo.title" class="fs-5 p-2" hx-trigger="dblclick" ka:post="this" ka:vals="action:'edit'"></div>
+      <input th:if="editing" class="form-control form-control-lg" name="title" th:value="todo.title"
+             hx-trigger="blur,keyup-enter,keyup-escape" ka:post="this" ka:vals="action:'update'" 
+             onfocus="this.selectionStart=this.selectionEnd=this.value.length" autofocus>
+    </div>
+    <div class="col-1 text-end p-0">
+      <button ka:post="this" ka:vals="action:'remove'" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-x-lg ka-indicator-hide"></i>
+      </button>
+    </div>
+  </div>
+  <div class="row py-2" th:if="todos.length">
+    <div class="col text-muted">
+      <span th:text="remaining"></span> <span th:text="remaining == 1 ? 'item' : 'items'"></span> left
+    </div>
+    <div class="col text-center">
+      <a href="#" class="btn btn-sm" th:classappend="selectIf('all')" ka:get="this" ka:vals="action:'all'">All</a>
+      <a href="#" class="btn btn-sm" th:classappend="selectIf('active')" ka:get="this" ka:vals="action:'active'">Active</a>
+      <a href="#" class="btn btn-sm" th:classappend="selectIf('complete')" ka:get="this" ka:vals="action:'complete'">Completed</a>
+    </div>
+    <div class="col text-end pe-0">
+      <button th:if="todos.length > remaining" ka:post="this" ka:vals="action:'removeComplete'" class="btn btn-outline-secondary btn-sm">Clear Completed</button>
+    </div>
+  </div>
+</div>

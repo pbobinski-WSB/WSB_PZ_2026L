@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="demoWebBDDTests:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>demoWebBDDTests</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="demo-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="demoWebBDDTests:war exploded" />
+    </root>
+  </artifact>
+</component>
